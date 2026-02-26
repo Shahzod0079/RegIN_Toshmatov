@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace RegIN_Toshmatov.Elements
 {
-    /// <summary>
-    /// Логика взаимодействия для ElementCapture.xaml
-    /// </summary>
+
     public partial class ElementCapture : UserControl
     {
         public CorrectCapture HandlerCorrectCapture;
@@ -84,7 +73,20 @@ namespace RegIN_Toshmatov.Elements
                 Capture.Children.Add(LCode);
             }
         }
-
+        private void InputCapture_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (InputCapture.Text.Length == 4)
+            {
+                if (!OnCapture())
+                {
+                    CreateCapture();
+                }
+                else if (HandlerCorrectCapture != null)
+                {
+                    HandlerCorrectCapture.Invoke();
+                }
+            }
+        }
         #endregion
 
         public bool OnCapture()

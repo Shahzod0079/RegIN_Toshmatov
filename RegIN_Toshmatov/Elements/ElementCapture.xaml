@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="RegIN_Toshmatov.Elements.ElementCapture"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RegIN_Toshmatov.Elements"
+    mc:Ignorable="d"
+    d:DesignWidth="280"
+    d:DesignHeight="100" Background="White">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="Capture"
+              Grid.Row="0"
+              Height="50"
+              VerticalAlignment="Top"/>
+
+        <Label Grid.Row="1"
+               Content="Enter capture:"
+               Margin="0,0,0,0"
+               VerticalAlignment="Center"/>
+
+        <TextBox x:Name="InputCapture"
+                 Grid.Row="2"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 Height="25"
+                 VerticalAlignment="Top"
+                 Margin="0,0,0,0"
+                 KeyUp="InputCapture_KeyUp"/>
+    </Grid>
+</UserControl>

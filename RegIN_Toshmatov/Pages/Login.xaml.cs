@@ -91,7 +91,7 @@ namespace RegIN_Toshmatov.Pages
                 StartAnimation.Duration = TimeSpan.FromSeconds(0.6);
                 StartAnimation.Completed += delegate
                 {
-                    User.Source = new BitmapImage(new Uri("pack://application:,,,/Images/ic-user.png"));
+                    User.Source = new BitmapImage(new Uri("pack://application:,,,/Images/ic-userr.png"));
                     DoubleAnimation EndAnimation = new DoubleAnimation();
                     EndAnimation.From = 0;
                     EndAnimation.To = 1;

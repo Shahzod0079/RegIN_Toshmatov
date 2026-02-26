@@ -46,19 +46,22 @@
                          TextWrapping="Wrap"
                          Text=""
                          VerticalAlignment="Top"
-                         PreviewTextInput="SetName"/>
+                          KeyUp="SetLogin"  
+                          LostFocus="SetLogin" 
+                         PreviewTextInput="SetLogin"/>
 
                 <Label Content="Enter name:"
                        Margin="10,213,10,0"
                        VerticalAlignment="Top"/>
 
                 <TextBox x:Name="TbName"
-                         Height="23"
-                         Margin="10,237,10,0"
-                         TextWrapping="Wrap"
-                         Text=""
-                         VerticalAlignment="Top"
-                         PreviewTextInput="SetLogin"/>
+                     Height="23"
+                     Margin="10,237,10,0"
+                     TextWrapping="Wrap"
+                     Text=""
+                     VerticalAlignment="Top"
+                     PreviewTextInput="SetName"/>
+                <!-- Исправьте -->
 
                 <Label Content="Enter password:"
                        Margin="10,265,10,0"

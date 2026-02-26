@@ -74,7 +74,8 @@ namespace RegIN_Toshmatov.Classes
 
             if (WorkingDB.OpenConnection(mySqlConnection))
             {
-                MySqlCommand mySqlCommand = new MySqlCommand("INSERT INTO `users`('Login', 'Password', 'Name', 'Image', 'DateUpdate', 'DateCreate') VALUES (@Login, @Password, @Name, @Image, @DateUpdate, @DateCreate)", mySqlConnection);
+
+                MySqlCommand mySqlCommand = new MySqlCommand("INSERT INTO `users`(`Login`, `Password`, `Name`, `Image`, `DateUpdate`, `DateCreate`) VALUES (@Login, @Password, @Name, @Image, @DateUpdate, @DateCreate)", mySqlConnection);
 
                 mySqlCommand.Parameters.AddWithValue("@Login", this.Login);
                 mySqlCommand.Parameters.AddWithValue("@Password", this.Password);

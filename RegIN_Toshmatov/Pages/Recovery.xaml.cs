@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,7 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using RegIN_Toshmatov.Classes;
 namespace RegIN_Toshmatov.Pages
 {
     /// <summary>
@@ -120,7 +121,7 @@ namespace RegIN_Toshmatov.Pages
 
         private void SetLogin(object sender, RoutedEventArgs e) =>
             MainWindow.mainWindow.UserLogIn.GetUserLogin(TbLogin.Text);
-    }
+    
     //метод восстановления пароля:
     public void SendNewPassword()
         {

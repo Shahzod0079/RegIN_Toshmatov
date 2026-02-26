@@ -7,7 +7,7 @@
       xmlns:uc="clr-namespace:RegIN_Toshmatov.Elements"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Recovery">
+      Title="Recovery" Background="White">
 
     <Grid>
         <Grid Height="345"
@@ -21,7 +21,7 @@
                        Margin="32"
                        VerticalAlignment="Top"
                        Width="100"
-                       Source="/RegIN;component/Images/ic-user.png">
+                       Source="/RegIN_Toshmatov;component/Images/ic-userr.png">
                     <Image.Clip>
                         <EllipseGeometry RadiusX="50"
                                          RadiusY="50"

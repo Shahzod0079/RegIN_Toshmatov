@@ -94,19 +94,7 @@ namespace RegIN_Toshmatov.Elements
             return StrCapture == InputCapture.Text;
         }
 
-        private void EnterCapture(object sender, KeyEventArgs e)
-        {
-            if (InputCapture.Text.Length == 4)
-            {
-                if (!OnCapture())
-                {
-                    CreateCapture();
-                }
-                else if (HandlerCorrectCapture != null)
-                {
-                    HandlerCorrectCapture.Invoke();
-                }
-            }
+
         }
     }
-}
+

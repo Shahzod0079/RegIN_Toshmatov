@@ -29,6 +29,8 @@ namespace RegIN_Toshmatov.Pages
         int CountSetPassword = 2;
         bool IsCapture = false;
 
+        public ThreadStart BlockAutorization { get; private set; }
+
         public Login()
         {
             InitializeComponent();
@@ -149,6 +151,7 @@ namespace RegIN_Toshmatov.Pages
                     SetNotification("Enter capture", Brushes.Red);
                 }
             }
+        }
 
             //метод блокировки пользователя.
             public void BlockAuthorization()

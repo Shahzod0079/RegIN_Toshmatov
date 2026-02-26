@@ -1,6 +1,5 @@
 ﻿using Mysqlx.Notice;
 using RegIN_Toshmatov.Classes;
-using RegIN_Toshmatov.Classes;
 using System;
 using System.Security.Cryptography;
 using System.Windows;

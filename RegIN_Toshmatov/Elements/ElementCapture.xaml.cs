@@ -66,7 +66,7 @@ namespace RegIN_Toshmatov.Elements
                 Capture.Children.Add(LBackground);
             }
         }
-        void Background()
+       new void Background()
         {
             Random ThisRandom = new Random();
             for (int i = 0; i < 4; i++)

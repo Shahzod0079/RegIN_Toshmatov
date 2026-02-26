@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using RegIN_Toshmatov.Classes;
-using RegIN_Toshmatov.Classes;
 
 namespace RegIN_Toshmatov.Classes
 {
-    internal class User
+    public class User
     {
         public int Id { get; set; }
         public string Login { get; set; }

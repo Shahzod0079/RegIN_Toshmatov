@@ -89,11 +89,21 @@ namespace RegIN_Toshmatov.Pages
                 if (ThisTypeConfirmation == TypeConfirmation.Login)
                 {
                     MessageBox.Show("Авторизация пользователя успешно подтверждена.");
+                    MainWindow.mainWindow.OpenPage(new PinCode(MainWindow.mainWindow.UserLogIn, false));
                 }
                 else
                 {
                     MainWindow.mainWindow.UserLogIn.SetUser();
+
+                    // Добавьте проверку!
+                    if (MainWindow.mainWindow.UserLogIn.Id <= 0)
+                    {
+                        // Загружаем пользователя заново, чтобы получить ID
+                        MainWindow.mainWindow.UserLogIn.GetUserLogin(MainWindow.mainWindow.UserLogIn.Login);
+                    }
+
                     MessageBox.Show("Регистрация пользователя успешно подтверждена.");
+                    MainWindow.mainWindow.OpenPage(new PinCode(MainWindow.mainWindow.UserLogIn, true));
                 }
             }
         }

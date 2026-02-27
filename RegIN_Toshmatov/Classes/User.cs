@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using MySql.Data.MySqlClient;
 using RegIN_Toshmatov.Classes;
 
@@ -74,8 +75,7 @@ namespace RegIN_Toshmatov.Classes
 
             if (WorkingDB.OpenConnection(mySqlConnection))
             {
-
-                MySqlCommand mySqlCommand = new MySqlCommand("INSERT INTO `users`(`Login`, `Password`, `Name`, `Image`, `DateUpdate`, `DateCreate`) VALUES (@Login, @Password, @Name, @Image, @DateUpdate, @DateCreate)", mySqlConnection);
+                MySqlCommand mySqlCommand = new MySqlCommand("INSERT INTO `users`(`Login`, `Password`, `Name`, `Image`, `DateUpdate`, `DateCreate`) VALUES (@Login, @Password, @Name, @Image, @DateUpdate, @DateCreate); SELECT LAST_INSERT_ID();", mySqlConnection);
 
                 mySqlCommand.Parameters.AddWithValue("@Login", this.Login);
                 mySqlCommand.Parameters.AddWithValue("@Password", this.Password);
@@ -84,7 +84,8 @@ namespace RegIN_Toshmatov.Classes
                 mySqlCommand.Parameters.AddWithValue("@DateUpdate", this.DateTimeUpdate);
                 mySqlCommand.Parameters.AddWithValue("@DateCreate", this.DateTimeCreate);
 
-                mySqlCommand.ExecuteNonQuery();
+                // Получаем ID нового пользователя
+                this.Id = Convert.ToInt32(mySqlCommand.ExecuteScalar());
             }
 
             WorkingDB.CloseConnection(mySqlConnection);
@@ -146,6 +147,52 @@ namespace RegIN_Toshmatov.Classes
             }
 
             return NPASSWORD;
+        }
+        public string PinCode { get; set; }
+
+        public void SavePinCode(string pinCode)
+        {
+            // Проверка ДО сохранения!
+            if (this.Id <= 0)
+            {
+                MessageBox.Show("Ошибка: ID пользователя не загружен!");
+                return;
+            }
+
+            MySqlConnection mySqlConnection = WorkingDB.OpenConnection();
+            if (WorkingDB.OpenConnection(mySqlConnection))
+            {
+                // Деактивируем старые пинкоды
+                MySqlCommand deactivateCmd = new MySqlCommand("UPDATE pincodes SET IsActive = FALSE WHERE UserId = @UserId", mySqlConnection);
+                deactivateCmd.Parameters.AddWithValue("@UserId", this.Id);
+                deactivateCmd.ExecuteNonQuery();
+
+                // Сохраняем новый пинкод
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO pincodes (UserId, PinCode) VALUES (@UserId, @PinCode)", mySqlConnection);
+                cmd.Parameters.AddWithValue("@UserId", this.Id);
+                cmd.Parameters.AddWithValue("@PinCode", pinCode);
+                cmd.ExecuteNonQuery();
+
+                this.PinCode = pinCode;
+            }
+            WorkingDB.CloseConnection(mySqlConnection);
+        }
+
+
+        public bool CheckPinCode(string pinCode)
+        {
+            MySqlConnection mySqlConnection = WorkingDB.OpenConnection();
+            bool result = false;
+
+            if (WorkingDB.OpenConnection(mySqlConnection))
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM pincodes WHERE UserId = @UserId AND PinCode = @PinCode AND IsActive = TRUE", mySqlConnection);
+                cmd.Parameters.AddWithValue("@UserId", this.Id);
+                cmd.Parameters.AddWithValue("@PinCode", pinCode);
+                result = Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+            WorkingDB.CloseConnection(mySqlConnection);
+            return result;
         }
     }
 }

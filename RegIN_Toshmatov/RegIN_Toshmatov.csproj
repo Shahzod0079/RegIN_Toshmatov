@@ -137,6 +137,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\PinCode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Recovery.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -147,11 +151,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pages\BasePage .cs" />
     <Compile Include="Pages\Confirmation.xaml.cs">
       <DependentUpon>Confirmation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PinCode.xaml.cs">
+      <DependentUpon>PinCode.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Recovery.xaml.cs">
       <DependentUpon>Recovery.xaml</DependentUpon>

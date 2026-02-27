@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 
 namespace RegIN_Toshmatov.Pages
@@ -203,64 +195,97 @@ namespace RegIN_Toshmatov.Pages
         {
             if (FileDialogImage.ShowDialog() == true)
             {
-                using (Aspose.Imaging.Image image = Aspose.Imaging.Image.Load(FileDialogImage.FileName))
+                string tempFile = Path.GetTempFileName() + ".jpg";
+                string finalFile = Path.Combine(Directory.GetCurrentDirectory(), "IUser.jpg");
+
+                try
                 {
-                    int NewWidth = 0;
-                    int NewHeight = 0;
-
-                    if (image.Width > image.Height)
+                    if (File.Exists(finalFile))
                     {
-                        NewWidth = (int)(image.Width * (256f / image.Height));
-                        NewHeight = 256;
-                    }
-                    else
-                    {
-                        NewWidth = 256;
-                        NewHeight = (int)(image.Height * (256f / image.Width));
+                        File.Delete(finalFile);
+                        Thread.Sleep(100);
                     }
 
-                    image.Resize(NewWidth, NewHeight);
-                    image.Save("IUser.jpg");
+                    using (var image = Aspose.Imaging.Image.Load(FileDialogImage.FileName))
+                    {
+                        int newWidth, newHeight;
+
+                        if (image.Width > image.Height)
+                        {
+                            newWidth = (int)(image.Width * (256f / image.Height));
+                            newHeight = 256;
+                        }
+                        else
+                        {
+                            newWidth = 256;
+                            newHeight = (int)(image.Height * (256f / image.Width));
+                        }
+
+                        image.Resize(newWidth, newHeight);
+                        image.Save(tempFile);
+                    }
+
+                    using (var rasterImage = (Aspose.Imaging.RasterImage)Aspose.Imaging.Image.Load(tempFile))
+                    {
+                        if (!rasterImage.IsCached)
+                            rasterImage.CacheData();
+
+                        int x = 0, y = 0;
+
+                        if (rasterImage.Width > rasterImage.Height)
+                            x = (int)((rasterImage.Width - 256f) / 2);
+                        else
+                            y = (int)((rasterImage.Height - 256f) / 2);
+
+                        var rectangle = new Aspose.Imaging.Rectangle(x, y, 256, 256);
+                        rasterImage.Crop(rectangle);
+                        rasterImage.Save(finalFile);
+                    }
+
+                    var bitmap = new BitmapImage();
+                    using (var stream = new FileStream(finalFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        bitmap.BeginInit();
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.StreamSource = stream;
+                        bitmap.EndInit();
+                    }
+                    bitmap.Freeze(); 
+
+                    var startAnimation = new DoubleAnimation
+                    {
+                        From = 1,
+                        To = 0,
+                        Duration = TimeSpan.FromSeconds(0.6)
+                    };
+
+                    startAnimation.Completed += (s, args) =>
+                    {
+                        User.Source = bitmap;
+                        var endAnimation = new DoubleAnimation
+                        {
+                            From = 0,
+                            To = 1,
+                            Duration = TimeSpan.FromSeconds(1.2)
+                        };
+                        User.BeginAnimation(Image.OpacityProperty, endAnimation);
+                    };
+
+                    User.BeginAnimation(Image.OpacityProperty, startAnimation);
+                    BSetImages = true;
                 }
-
-                using (Aspose.Imaging.RasterImage rasterImage = (Aspose.Imaging.RasterImage)Aspose.Imaging.Image.Load("IUser.jpg"))
+                catch (Exception ex)
                 {
-                    if (!rasterImage.IsCached)
-                    {
-                        rasterImage.CacheData();
-                    }
-
-                    int X = 0;
-                    int Width = 256;
-                    int Y = 0;
-                    int Height = 256;
-
-                    if (rasterImage.Width > rasterImage.Height)
-                        X = (int)((rasterImage.Width - 256f) / 2);
-                    else
-                        Y = (int)((rasterImage.Height - 256f) / 2);
-
-                    Aspose.Imaging.Rectangle rectangle = new Aspose.Imaging.Rectangle(X, Y, Width, Height);
-                    rasterImage.Crop(rectangle);
-                    rasterImage.Save("IUser.jpg");
+                    MessageBox.Show($"Ошибка при обработке изображения: {ex.Message}");
+                    BSetImages = false;
                 }
-
-                DoubleAnimation StartAnimation = new DoubleAnimation();
-                StartAnimation.From = 1;
-                StartAnimation.To = 0;
-                StartAnimation.Duration = TimeSpan.FromSeconds(0.6);
-                StartAnimation.Completed += delegate
+                finally
                 {
-                    User.Source = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + @"\IUser.jpg"));
-                    DoubleAnimation EndAnimation = new DoubleAnimation();
-                    EndAnimation.From = 0;
-                    EndAnimation.To = 1;
-                    EndAnimation.Duration = TimeSpan.FromSeconds(1.2);
-                    User.BeginAnimation(Image.OpacityProperty, EndAnimation);
-                };
-
-                User.BeginAnimation(Image.OpacityProperty, StartAnimation);
-                BSetImages = true;
+                    if (File.Exists(tempFile))
+                    {
+                        try { File.Delete(tempFile); } catch { }
+                    }
+                }
             }
             else
             {

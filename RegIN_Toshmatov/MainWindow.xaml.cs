@@ -1,7 +1,6 @@
-﻿using Mysqlx.Notice;
-using RegIN_Toshmatov.Classes;
+﻿using RegIN_Toshmatov.Classes;
+using RegIN_Toshmatov.Pages;
 using System;
-using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;

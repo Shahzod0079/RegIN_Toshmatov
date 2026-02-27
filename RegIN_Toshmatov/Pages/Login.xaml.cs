@@ -25,6 +25,7 @@ namespace RegIN_Toshmatov.Pages
 
     public partial class Login : Page
     {
+        private int _countSetPassword = 2;
         string OldLogin;
         int CountSetPassword = 2;
         bool IsCapture = false;
@@ -132,15 +133,15 @@ namespace RegIN_Toshmatov.Pages
                     }
                     else
                     {
-                        if (CountSetPassword > 0)
+                        if (_countSetPassword > 0)  // ← исправлено
                         {
-                            SetNotification($"Password is incorrect, {CountSetPassword} attempts left", Brushes.Red);
-                            CountSetPassword--;
+                            SetNotification($"Password is incorrect, {_countSetPassword} attempts left", Brushes.Red);
+                            _countSetPassword--;  // ← исправлено
                         }
                         else
                         {
-                            Thread TBlockAutorization = new Thread(BlockAutorization);
-                            TBlockAutorization.Start();
+                            Thread TBlockAuthorization = new Thread(BlockAuthorization);
+                            TBlockAuthorization.Start();
                         }
 
                         SendMail.SendMessage("An attempt was made to log into your account.", MainWindow.mainWindow.UserLogIn.Login);
@@ -153,8 +154,8 @@ namespace RegIN_Toshmatov.Pages
             }
         }
 
-            //метод блокировки пользователя.
-            public void BlockAuthorization()
+        //метод блокировки пользователя.
+        public void BlockAuthorization()
         {
             DateTime StartBlock = DateTime.Now.AddMinutes(3);
 
@@ -231,6 +232,10 @@ namespace RegIN_Toshmatov.Pages
 
         private void OpenRegion(object sender, MouseButtonEventArgs e) =>
             MainWindow.mainWindow.OpenPage(new Regin());
+    
+    private void OpenPinLogin(object sender, MouseButtonEventArgs e)
+        {
+            MainWindow.mainWindow.OpenPage(new PinCode(MainWindow.mainWindow.UserLogIn, false));
+        }
     }
 }
-
